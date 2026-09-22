@@ -20,33 +20,84 @@ const router = express.Router();
 //  DELETE /produtos/:id     → 204 (sem corpo); 404 se não existir
 
 // GET /produtos — lista todos
-router.get("/", async (req, res) => {
-  // TODO: retorne 200 com todos os produtos (Produto.findAll()).
+router.get("/produtos", async (req, res) => {
+  const produtos = await Produto.findAll();
+  res.json(produtos);
 });
 
 // GET /produtos/:id — um produto
-router.get("/:id", async (req, res) => {
-  // TODO: busque por id; 200 com o produto ou 404 se não existir.
+router.get("/produtos/:id", async (req, res) => {
+  const produto = await Produto.findByPk(req.params.id);
+
+  if (!produto) {
+    return res.status(404).json({ erro: 'Produto não encontrado' })
+  }
+
+  return res.status(200).json(produto);
 });
 
 // POST /produtos — cria
-router.post("/", async (req, res) => {
-  // TODO: valide descricao e preco (400 se faltar); crie e responda 201 com o produto.
+router.post("/produtos", async (req, res) => {
+  const { descricao, preco } = req.body;
+  const produto = await Produto.create({ descricao, preco });
+
+  if (!descricao || !preco) {
+    return res.status(400).json({ erro: 'Descrição ou Preço faltando para concluir o cadastro do produto' })
+  }
+
+  res.status(201).json(produto);
 });
 
 // PUT /produtos/:id — substitui (descricao e preco obrigatórios)
-router.put("/:id", async (req, res) => {
-  // TODO: 404 se não existir; 400 se faltar campo; senão atualize e responda 200.
+router.put("/produtos/:id", async (req, res) => {
+  const { descricao, preco } = req.body;
+
+  if (!descricao || !preco) {
+    return res.status(400).json({ erro: 'Descrição ou Preço faltando para a atualização do produto' })
+  }
+
+  const produto = await Produto.findByPk(req.params.id);
+
+  if (!produto) {
+    return res.status(404).json({ erro: 'Produto não encontrado' })
+  }
+
+  produto.descricao = descricao;
+  produto.preco = preco;
+
+  await produto.save();
+
+  res.status(200).json(produto);
 });
 
 // PATCH /produtos/:id — atualização parcial
-router.patch("/:id", async (req, res) => {
-  // TODO: 404 se não existir; atualize só os campos enviados; responda 200.
+router.patch("/produtos/:id", async (req, res) => {
+  const { descricao, preco } = req.body;
+
+  const produto = await Produto.findByPk(req.params.id);
+
+  if (!produto) {
+    return res.status(404).json({ erro: 'Produto não encontrado' })
+  }
+
+  if (descricao !== undefined) produto.descricao = descricao;
+  if (preco !== undefined) produto.preco = preco;
+  await produto.save();
+
+  res.status(200).json(produto)
 });
 
 // DELETE /produtos/:id — remove
-router.delete("/:id", async (req, res) => {
-  // TODO: 404 se não existir; senão remova e responda 204 (sem corpo).
+router.delete("/produtos/:id", async (req, res) => {
+  const produto = await Produto.findByPk(req.params.id);
+
+  if (!produto) {
+    return res.status(404).json({ erro: 'Produto não encontrado' })
+  }
+
+  await produto.destroy();
+
+  res.status(204).send();
 });
 
 module.exports = router;
