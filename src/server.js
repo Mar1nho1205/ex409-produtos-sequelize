@@ -1,6 +1,6 @@
 const express = require("express");
 const sequelize  = require("./config/banco");
-//const produtosRouter = require("./rotas/produtos");
+const produtosRouter = require("./rotas/produtos");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -14,7 +14,7 @@ app.get("/health", (req, res) => {
 });
 
 // Todas as rotas de /produtos ficam no roteador dedicado.
-//app.use("/produtos", produtosRouter);
+app.use("/produtos", produtosRouter);
 
 // Sincroniza o banco (cria a tabela) e sobe o servidor.
 sequelize.sync().then(() => {
