@@ -1,5 +1,4 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../config/banco');
 
 const produto = sequelize.define('produto', {
     id: {
