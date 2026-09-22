@@ -1,5 +1,5 @@
 const express = require("express");
-//const sequelize  = require("./config/banco");
+const sequelize  = require("./config/banco");
 //const produtosRouter = require("./rotas/produtos");
 
 const app = express();
@@ -17,10 +17,10 @@ app.get("/health", (req, res) => {
 //app.use("/produtos", produtosRouter);
 
 // Sincroniza o banco (cria a tabela) e sobe o servidor.
-//sequelize.sync().then(() => {
+sequelize.sync().then(() => {
   app.listen(PORT, () => {
     console.log(`API de Produtos rodando em http://localhost:${PORT}`);
   });
-//});
+});
 
 module.exports = app;
