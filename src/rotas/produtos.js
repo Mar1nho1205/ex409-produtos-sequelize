@@ -22,7 +22,7 @@ const router = express.Router();
 // GET /produtos — lista todos
 router.get("/produtos", async (req, res) => {
   const produtos = await Produto.findAll();
-  res.json(produtos);
+  res.status(200).json(produtos);
 });
 
 // GET /produtos/:id — um produto
