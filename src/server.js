@@ -1,5 +1,5 @@
 const express = require("express");
-const sequelize  = require("./config/banco");
+const { sequelize }  = require("./models/produto");
 const produtosRouter = require("./rotas/produtos");
 
 const app = express();
