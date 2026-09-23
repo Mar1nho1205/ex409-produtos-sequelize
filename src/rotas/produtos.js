@@ -39,12 +39,12 @@ router.get("/:id", async (req, res) => {
 // POST /produtos — cria
 router.post("/", async (req, res) => {
   const { descricao, preco } = req.body;
-  const produto = await Produto.create({ descricao, preco });
 
   if (!descricao || !preco) {
     return res.status(400).json({ erro: 'Descrição ou Preço faltando para concluir o cadastro do produto' })
   }
-
+  
+  const produto = await Produto.create({ descricao, preco });
   res.status(201).json(produto);
 });
 
